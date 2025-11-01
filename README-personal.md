@@ -37,3 +37,9 @@ root directory:
 ```shell
 $ DISPLAY=:0 pm2 start npm --name "magic_mirror" -- start
 ```
+
+## Watchlist for potential future modules
+
+- [multiple rotating mirror pages](https://github.com/edward-shen/MMM-pages)
+- [manage mirror in Home Assistant](https://github.com/ambarusa/MMM-HomeAssistant)
+- [display Wikipedia snippets](https://github.com/mihairinzis/MMM-wiki)
