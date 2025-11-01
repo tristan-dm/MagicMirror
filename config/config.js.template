@@ -1,0 +1,204 @@
+/* Config Sample
+ *
+ * For more information on how you can configure this file
+ * see https://docs.magicmirror.builders/configuration/introduction.html
+ * and https://docs.magicmirror.builders/modules/configuration.html
+ *
+ * You can use environment variables using a `config.js.template` file instead of `config.js`
+ * which will be converted to `config.js` while starting. For more information
+ * see https://docs.magicmirror.builders/configuration/introduction.html#enviromnent-variables
+ */
+let config = {
+	address: "0.0.0.0",	// default is "localhost"
+							// - "localhost", "127.0.0.1", "::1" to listen on loopback interface
+							// - another specific IPv4/6 to listen on a specific interface
+							// - "0.0.0.0", "::" to listen on any interface
+							// Default, when address config is left out or empty, is "localhost"
+	port: 8080,		// default
+	ipWhitelist: ["127.0.0.1", "::ffff:127.0.0.1", "::1", "::ffff:172.17.0.1", "192.168.178.108"], // default -- need to add your IP here
+									// or add a specific IPv4 of 192.168.1.5 :
+									// ["127.0.0.1", "::ffff:127.0.0.1", "::1", "::ffff:192.168.1.5"],
+									// or IPv4 range of 192.168.3.0 --> 192.168.3.15 use CIDR format :
+									// ["127.0.0.1", "::ffff:127.0.0.1", "::1", "::ffff:192.168.3.0/28"],
+
+	basePath: "/",	// The URL path where MagicMirror² is hosted. If you are using a Reverse proxy
+									// you must set the sub path here. basePath must end with a /
+
+	useHttps: false,			// Support HTTPS or not, default "false" will use HTTP
+	httpsPrivateKey: "",	// HTTPS private key path, only require when useHttps is true
+	httpsCertificate: "",	// HTTPS Certificate path, only require when useHttps is true
+
+	language: "en",
+	locale: "en-US",
+	logLevel: ["INFO", "LOG", "WARN", "ERROR"], // Add "DEBUG" for even more logging
+	timeFormat: 24,
+	units: "metric",
+
+	modules: [
+		{
+			module: "alert",
+		},
+		{
+			module: "updatenotification",
+			position: "top_bar"
+		},
+		{
+			module: "clock",
+			position: "top_left"
+		},
+		{
+			module: "calendar",
+			header: "Birthdays",
+			position: "top_left",
+			config: {
+				calendars: [
+					{
+						fetchInterval: 7 * 24 * 60 * 60 * 1000,
+						symbol: "calendar-check",
+						url: "${GOOGLE_CALENDAR_LINK}"
+					}
+				]
+				//[
+				//	{
+				//		fetchInterval: 7 * 24 * 60 * 60 * 1000,
+				//		symbol: "calendar-check",
+				//		url: "https://ics.calendarlabs.com/46/0ca1bcc9/Germany_Holidays.ics"
+				//	}
+				//]
+			}
+		},
+		//{
+		//	module: "compliments",
+		//	position: "lower_third"
+		//},
+		{
+			module: 'MMM-Facts',
+			position: 'bottom_center',
+			config: {
+					updateInterval: 60,
+					fadeSpeed: 4,
+					category: 'random',
+			}
+		},
+		{
+			module: "weather",
+			position: "top_right",
+			config: {
+				weatherProvider: "openmeteo",
+				type: "current",
+				lat: 53.55,
+				lon: 9.99
+			}
+		},
+		{
+			module: "weather",
+			position: "top_right",
+			header: "Weather Forecast",
+			config: {
+				weatherProvider: "openmeteo",
+				type: "forecast",
+				lat: 53.55,
+				lon: 9.99
+			}
+		},
+		{
+			module: "newsfeed",
+			position: "bottom_bar",
+			config: {
+				feeds: [
+					{
+						title: "Tagesschau",
+						url: "https://www.tagesschau.de/infoservices/alle-meldungen-100~rss2.xml"
+					}
+				],
+				showSourceTitle: true,
+				showPublishDate: true,
+				broadcastNewsFeeds: true,
+				broadcastNewsUpdates: true
+			}
+		},
+				{
+       module: 'MMM-HH-LocalTransport',
+       position: 'bottom_right',
+       header: 'HVV - Connections',
+       config: {
+           id: 'Master:60904', // Trainstation ID
+	         apiKey: '${HVV_API_KEY}',
+			     apiUser: '${HVV_API_USER}',
+           maximumEntries: '10' // Max departures displayed
+       }
+
+        },
+	// {
+	// 	module: 'MMM-Screencast',
+	// 	position: 'top_center', // This position is for a hidden <div /> and not the screencast window
+	// 	config: {
+	// 		position: 'topCenter',
+	// 		height: 300,
+	// 		width: 600,
+	// 		castName: 'skcMagicMirror',
+	// 	}
+        // },
+	{
+	module: 'MMM-Globe',
+	position: 'top_center',
+	config: {
+		style: 'europeDiscNat',
+		imageSize: 600,
+		ownImagePath:'',
+		updateInterval: 10*60*1000
+	}
+	},
+{
+  module: 'MMM-MQTT',
+  position: 'bottom_left',
+  header: 'Home Assistant',
+  config: {
+    logging: false,
+    useWildcards: false,
+    bigMode: false, // Set to true to display big numbers with label above
+    mqttServers: [
+      {
+        address: '192.168.178.187',  // Server address or IP address
+        port: '1883',          // Port number if other than default
+        subscriptions: [
+		  {
+			  topic: 'smartkrug/smart_mirror/power_usage_today', // Topic to look for
+			  label: 'power usage today (mirror)', // Displayed in front of value
+			  suffix: 'Wh',         // Displayed after the value
+              sortOrder: 10,        // Can be used to sort entries in the same table
+              maxAgeSeconds: 60,    // Reduce intensity if value is older
+		  },
+		  {
+			  topic: 'smartkrug/skc_weather/relative_real_radiation', // Topic to look for
+			  label: 'Relative real radiation', // Displayed in front of value
+			  suffix: 'W/m²',         // Displayed after the value
+              sortOrder: 20,        // Can be used to sort entries in the same table
+              maxAgeSeconds: 60,    // Reduce intensity if value is older
+		  },
+		  {
+			  topic: 'smartkrug/skc_weather/sun_elevation', // Topic to look for
+			  label: 'Sun elevation over horizon', // Displayed in front of value
+			  suffix: '°',         // Displayed after the value
+              sortOrder: 21,        // Can be used to sort entries in the same table
+              maxAgeSeconds: 60,    // Reduce intensity if value is older
+		  },
+		  {
+			  topic: 'smartkrug/skc_weather/sun_facing_wall', // Topic to look for
+			  label: 'Sun-facing wall', // Displayed in front of value
+			  // suffix: 'Wh',         // Displayed after the value
+              sortOrder: 22,        // Can be used to sort entries in the same table
+              maxAgeSeconds: 60,    // Reduce intensity if value is older
+		  },
+        ]
+      }
+    ],
+  }
+}
+	]
+};
+
+/*************** DO NOT EDIT THE LINE BELOW ***************/
+if (typeof module !== "undefined") { module.exports = config; }
+
+
