@@ -71,15 +71,37 @@ let config = {
 		//	module: "compliments",
 		//	position: "lower_third"
 		//},
-		{
-			module: 'MMM-Facts',
-			position: 'bottom_center',
-			config: {
-					updateInterval: 60,
-					fadeSpeed: 4,
-					category: 'random',
-			}
-		},
+    {
+    module: "MMM-wiki",
+    position: "bottom_center",
+    config: {
+        updateInterval: 30000,
+        language: "en",
+        characterLimit: 500,
+        category: "DidYouKnow",
+        badTitles: [
+            "Graphical",
+            "timeline",
+            "List"
+        ],
+        badContents: [
+            "This article",
+            "See also",
+            "redirects here",
+            "The following outline",
+            "may refer to"
+        ],
+    }
+},
+		//{
+		//	module: 'MMM-Facts',
+		//	position: 'bottom_center',
+		//	config: {
+		//			updateInterval: 60,
+		//			fadeSpeed: 4,
+		//			category: 'random',
+		//	}
+		//},
 		{
 			module: "weather",
 			position: "top_right",
